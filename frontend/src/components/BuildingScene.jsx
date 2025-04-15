@@ -22,7 +22,7 @@ function getOffset(buildings) {
   return { lng: avgLng, lat: avgLat };
 }
 
-function Building({ building, onClick, isSelected, offset, scale = 100000 }) {
+function Building({ building, onClick, isSelected, isHighlighted, offset, scale = 100000 }) {
   const shape = new THREE.Shape();
 
   if (!building.coordinates || building.coordinates.length < 3) {
@@ -44,7 +44,7 @@ function Building({ building, onClick, isSelected, offset, scale = 100000 }) {
 
   const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
   const roofGeometry = new THREE.ShapeGeometry(shape);
-  const color = isSelected ? "orange" : "skyblue";
+  const color = ((isSelected || isHighlighted) ? "orange" : "skyblue");
 
   return (
     <group
@@ -67,11 +67,13 @@ function Building({ building, onClick, isSelected, offset, scale = 100000 }) {
   );
 }
 
-export default function BuildingScene({ buildings }) {
+export default function BuildingScene({ buildings, fetchedBuildings }) {
   const [selected, setSelected] = useState(null);
 
   // Compute offset once
   const offset = useMemo(() => getOffset(buildings), [buildings]);
+
+  const highlightedIds = useMemo(() => new Set(fetchedBuildings.map(b => b.struct_id)), [fetchedBuildings]);
 
   return (
     <>
@@ -97,6 +99,7 @@ export default function BuildingScene({ buildings }) {
             offset={offset}
             onClick={setSelected}
             isSelected={selected?.struct_id === building.struct_id}
+            isHighlighted={highlightedIds.has(building.struct_id)}
           />
         ))}
       </Canvas>

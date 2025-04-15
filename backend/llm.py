@@ -6,22 +6,14 @@ HUGGINGFACE_API_KEY = os.environ.get("HF_API_KEY")
 
 def process_query(query):
     prompt = f"""
-    You are an AI that extracts filters from natural language queries.
-
-    Input: "{query}"
-
-    Output format:
-    {{
-    "attribute": "...",
-    "operator": "...",
-    "value": ...
-    }}
-
-    Only return the JSON. No explanations, no extra text.
+    You are a helpful assistant that extracts filters from user queries.
+    Query: "{query}"
+    Once you found the filter based off the query, Respond ONLY with a JSON object in this format with attribute being the filter:
+    {{"attribute": "...", "operator": "...", "value": ...}}
     """
     
     response = requests.post(
-        "https://api-inference.huggingface.co/models/google/flan-t5-large",
+        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1",
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )

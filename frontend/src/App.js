@@ -53,7 +53,7 @@ function App() {
         </button>
         {loading && <p style={{ position: 'absolute', top: 50, left: 10 }}>Loading...</p>}
       </div>
-      <BuildingScene buildings={fetchedBuildings} />
+      <BuildingScene buildings={buildings} fetchedBuildings={fetchedBuildings} />
     </div>
   );
 }
