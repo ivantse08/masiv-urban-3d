@@ -13,9 +13,16 @@ def get_buildings_endpoint():
 
 @app.route("/api/query", methods=["POST"])
 def query():
-    query_text = request.json.get("query")
+    data = request.json
+    query_text = data.get("query", "")
+    
     filter_instruction = process_query(query_text)
-    filtered = filter_buildings(get_buildings(), filter_instruction)
+    print("LLM Filter:", filter_instruction)
+
+    # Example filtering logic (replace with your real data logic)
+    buildings = get_buildings()  # Load buildings from wherever you're storing them
+    filtered = filter_buildings(buildings, filter_instruction)
+
     return jsonify(filtered)
 
 if __name__ == "__main__":

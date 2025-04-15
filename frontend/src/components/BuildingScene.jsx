@@ -81,8 +81,6 @@ export default function BuildingScene({ buildings }) {
         <ambientLight intensity={0.6} />
         <pointLight position={[100, 100, 100]} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
-        
-        {/* OrbitControls to allow zoom and pan */}
         <OrbitControls minDistance={100} maxDistance={2000} />
 
         {/* Ground plane */}

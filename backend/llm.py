@@ -11,4 +11,8 @@ def process_query(query):
         json={"inputs": prompt}
     )
     result = response.json()
-    return eval(result[0]['generated_text'])  # Make sure to validate this safely!
+    try:
+        return eval(result[0]['generated_text'])
+    except Exception as e:
+        print("LLM parsing error:", e)
+        return {}
