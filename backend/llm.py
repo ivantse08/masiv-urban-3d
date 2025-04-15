@@ -8,7 +8,7 @@ def process_query(query):
     prompt = f"""
     You are a helpful assistant that extracts filters from user queries.
     Here is the user query: "{query}"
-    Choose the most relevant filter based off these options: height, area, length, stage of construction
+    Choose the most relevant filter based off these options: height, area, length, stage of construction and provide a value it should be greater or less than.
     """
     
     response = requests.post(

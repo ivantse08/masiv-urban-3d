@@ -9,9 +9,17 @@ function App() {
   // Pull building data on start
   useEffect(() => {
     fetch("https://masiv-urban-3d.onrender.com/api/buildings")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
       .then((data) => {
         setBuildings(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching buildings:", error);
       });
   }, []);
 

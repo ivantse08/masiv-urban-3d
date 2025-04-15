@@ -55,12 +55,12 @@ def get_buildings():
             "rooftop_elev_z": row.get("rooftop_elev_z"),
             "grd_elev_min_z": row.get("grd_elev_min_z"),
             "extra": {
-                "bldg_code": row.get("bldg_code"),
-                "bldg_code_desc": row.get("bldg_code_desc"),
-                "shape_area": row.get("shape__area"),
-                "shape_length": row.get("shape__length"),
-                "obscured": row.get("obscured"),
-                "create_dt_utc": row.get("create_dt_utc"),
+                "bldg_code": row.get("bldg_code") or "Unknown",
+                "bldg_code_desc": row.get("bldg_code_desc") or "Unknown",
+                "shape_area": float(row.get("shape__area")) if gpd.notna(row.get("shape__area")) else -1,
+                "shape_length": float(row.get("shape__length")) if gpd.notna(row.get("shape__length")) else -1,
+                "obscured": row.get("obscured") or "Unknown",
+                "create_dt_utc": row.get("create_dt_utc") or "Unknown",
             }
         }
 
