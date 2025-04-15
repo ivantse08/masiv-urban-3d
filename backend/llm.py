@@ -1,4 +1,5 @@
 import requests
+import json
 import os
 
 HUGGINGFACE_API_KEY = os.environ.get("HF_API_KEY")
@@ -12,7 +13,10 @@ def process_query(query):
     )
     result = response.json()
     try:
-        return eval(result[0]['generated_text'])
+        # Safely parse JSON-like string
+        generated = result[0]['generated_text']
+        return json.loads(generated)
     except Exception as e:
         print("LLM parsing error:", e)
+        print("Raw LLM output:", result)
         return {}
