@@ -13,7 +13,7 @@ def process_query(query):
     """
     
     response = requests.post(
-        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1",
+        "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )

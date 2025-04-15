@@ -12,7 +12,6 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setBuildings(data);
-        setFetchedBuildings(data);
       });
   }, []);
 
