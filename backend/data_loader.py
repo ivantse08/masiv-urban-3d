@@ -76,7 +76,29 @@ def safe_val(val, default="Unknown"):
 def filter_buildings(buildings, rule):
     attr = rule['attribute']
     op = rule['operator']
-    value = float(rule['value'])
-    ops = {">": lambda x: x > value, "<": lambda x: x < value, "=": lambda x: x == value}
+    value = rule['value']
 
-    return [b for b in buildings if ops[op](float(b.get(attr, 0)))]
+    # Try casting value to float if possible
+    try:
+        value = float(value)
+    except ValueError:
+        pass  # Keep as string
+
+    ops = {
+        ">": lambda x: float(x) > value,
+        "<": lambda x: float(x) < value,
+        "=": lambda x: str(x).lower() == str(value).lower()
+    }
+
+    def get_nested_attr(building):
+        # Handle both flat and nested cases
+        if attr in building:
+            return building[attr]
+        elif 'extra' in building and attr in building['extra']:
+            return building['extra'][attr]
+        return None
+
+    return [
+        b for b in buildings
+        if (val := get_nested_attr(b)) is not None and ops[op](val)
+    ]
