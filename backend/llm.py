@@ -16,7 +16,7 @@ def process_query(query):
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )
-    print(response.text)
+    print("ResponseText", response.text)
     result = response.json()
     try:
         # Safely parse JSON-like string

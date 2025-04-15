@@ -42,10 +42,6 @@ def get_buildings():
         except:
             height = 10
 
-        # You can inspect the row fields by printing once
-        print("Row keys:", row.keys())
-        print("Example row:", row.to_dict())
-
         building = {
             "coordinates": coordinates,
             "height": height,
@@ -54,12 +50,12 @@ def get_buildings():
             "rooftop_elev_z": row.get("rooftop_elev_z"),
             "grd_elev_min_z": row.get("grd_elev_min_z"),
             "extra": {
-                "bldg_code": row.get("bldg_code") or "Unknown",
-                "bldg_code_desc": row.get("bldg_code_desc") or "Unknown",
-                "shape_area": safe_float(row.get("shape__area")),
-                "shape_length": safe_float(row.get("shape__length")),
-                "obscured": row.get("obscured") or "Unknown",
-                "create_dt_utc": row.get("create_dt_utc") or "Unknown",
+                "bldg_code": safe_val(row.get("bldg_code")),
+                "bldg_code_desc": safe_val(row.get("bldg_code_desc")),
+                "shape_area": safe_val(row.get("shape__area"), -1),
+                "shape_length": safe_val(row.get("shape__length"), -1),
+                "obscured": safe_val(row.get("obscured")),
+                "create_dt_utc": safe_val(row.get("create_dt_utc")),
             }
         }
 
@@ -67,13 +63,15 @@ def get_buildings():
 
     return buildings
 
-def safe_float(value):
+def safe_val(val, default="Unknown"):
+    if val is None:
+        return default
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return -1
-
-
+        if isinstance(val, float) and math.isnan(val):
+            return default
+    except:
+        pass
+    return val
 
 def filter_buildings(buildings, rule):
     attr = rule['attribute']
