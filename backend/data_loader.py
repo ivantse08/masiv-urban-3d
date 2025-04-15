@@ -1,7 +1,6 @@
 import requests
 import geopandas as gpd
 import math
-from shapely.geometry import shape
 
 def get_buildings():
     url = "https://data.calgary.ca/resource/cchr-krqg.geojson"
@@ -56,7 +55,6 @@ def get_buildings():
                 "shape_area": safe_val(row.get("shape__area"), -1),
                 "shape_length": safe_val(row.get("shape__length"), -1),
                 "obscured": safe_val(row.get("obscured")),
-                "create_dt_utc": safe_val(row.get("create_dt_utc")),
             }
         }
 
