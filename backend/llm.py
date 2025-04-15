@@ -7,13 +7,12 @@ HUGGINGFACE_API_KEY = os.environ.get("HF_API_KEY")
 def process_query(query):
     prompt = f"""
     You are a helpful assistant that extracts filters from user queries.
-    Query: "{query}"
-    Once you found the filter based off the query, Respond ONLY with a JSON object in this format with attribute being the filter:
-    {{"attribute": "...", "operator": "...", "value": ...}}
+    Here is the user query: "{query}"
+    Choose the most relevant filter based off these options: height, area, length, stage of construction
     """
     
     response = requests.post(
-        "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "https://api-inference.huggingface.co/models/google/flan-t5-xxl",
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )

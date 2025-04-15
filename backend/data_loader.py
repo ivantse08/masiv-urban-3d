@@ -1,4 +1,6 @@
 import requests
+import geopandas as gpd 
+from shapely.geometry import shape
 
 def get_buildings():
     url = "https://data.calgary.ca/resource/cchr-krqg.geojson"
@@ -7,33 +9,55 @@ def get_buildings():
         "$limit": 1000
     }
 
-    response = requests.get(url, params=params)
-    data = response.json()
+    buildingResponse = requests.get(url, params=params)
+    buildingData = buildingResponse.json()
+
+    main_features = [f for f in buildingData["features"] if f["geometry"] and f["geometry"]["type"] == "Polygon"]
+    main_gdf = gpd.GeoDataFrame.from_features(main_features, crs="EPSG:4326")
+
+    url_metaData = "https://data.calgary.ca/resource/uc4c-6kbd.geojson"
+    buildingmetaDataResponse = requests.get(url_metaData, params=params)
+    buildingMetaData = buildingmetaDataResponse.json()
+
+    extra_features = [f for f in buildingMetaData["features"] if f["geometry"]]
+    extra_gdf = gpd.GeoDataFrame.from_features(extra_features, crs="EPSG:4326")
+
+    joined = gpd.sjoin(main_gdf, extra_gdf, how="left", predicate="intersects")
+    print(joined)
 
     buildings = []
 
-    for feature in data.get("features", []):
-        geom = feature.get("geometry", {})
-        props = feature.get("properties", {})
-
-        if geom.get("type") != "Polygon":
+    for _, row in joined.iterrows():
+        if row.geometry.geom_type != "Polygon":
             continue
 
-        coordinates = [[float(x), float(y)] for x, y in geom["coordinates"][0]]
+        coordinates = [[x, y] for x, y in row.geometry.exterior.coords]
 
-        # Compute height if possible
+        # Calculate height
         try:
-            height = float(props["rooftop_elev_z"]) - float(props["grd_elev_min_z"])
-        except (KeyError, ValueError):
+            height = float(row.get("rooftop_elev_z", 0)) - float(row.get("grd_elev_min_z", 0))
+        except:
             height = 10
+
+        # You can inspect the row fields by printing once
+        print("Row keys:", row.keys())
+        print("Example row:", row.to_dict())
 
         building = {
             "coordinates": coordinates,
             "height": height,
-            "struct_id": props.get("struct_id"),
-            "stage": props.get("stage"),
-            "rooftop_elev_z": props.get("rooftop_elev_z"),
-            "grd_elev_min_z": props.get("grd_elev_min_z"),
+            "struct_id": row.get("struct_id"),
+            "stage": row.get("stage"),
+            "rooftop_elev_z": row.get("rooftop_elev_z"),
+            "grd_elev_min_z": row.get("grd_elev_min_z"),
+            "extra": {
+                "bldg_code": row.get("bldg_code"),
+                "bldg_code_desc": row.get("bldg_code_desc"),
+                "shape_area": row.get("shape__area"),
+                "shape_length": row.get("shape__length"),
+                "obscured": row.get("obscured"),
+                "create_dt_utc": row.get("create_dt_utc"),
+            }
         }
 
         buildings.append(building)
