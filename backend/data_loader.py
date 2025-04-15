@@ -16,7 +16,11 @@ def get_buildings():
     main_gdf = gpd.GeoDataFrame.from_features(main_features, crs="EPSG:4326")
 
     url_metaData = "https://data.calgary.ca/resource/uc4c-6kbd.geojson"
-    buildingmetaDataResponse = requests.get(url_metaData, params=params)
+    metaDataParams = {
+        "$where": "within_circle(multipolygon, 51.0447, -114.0631, 500)",  # Approx. 3–4 blocks
+        "$limit": 1000
+    }
+    buildingmetaDataResponse = requests.get(url_metaData, params=metaDataParams)
     buildingMetaData = buildingmetaDataResponse.json()
 
     extra_features = [f for f in buildingMetaData["features"] if f["geometry"]]
