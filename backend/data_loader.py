@@ -51,10 +51,10 @@ def get_buildings():
             "rooftop_elev_z": row.get("rooftop_elev_z"),
             "grd_elev_min_z": row.get("grd_elev_min_z"),
             "extra": {
-                "bldg_code": safe_val(row.get("bldg_code")),
-                "bldg_code_desc": safe_val(row.get("bldg_code_desc")),
-                "shape_area": safe_val(row.get("shape__area"), -1),
-                "shape_length": safe_val(row.get("shape__length"), -1),
+                "building_code": safe_val(row.get("bldg_code")),
+                "building_type": safe_val(row.get("bldg_code_desc")),
+                "area": safe_val(row.get("shape__area"), -1),
+                "perimeter": safe_val(row.get("shape__length"), -1),
                 "obscured": safe_val(row.get("obscured")),
             }
         }
