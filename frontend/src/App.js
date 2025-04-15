@@ -7,11 +7,15 @@ function App() {
   useEffect(() => {
     fetch("https://masiv-urban-3d.onrender.com/api/buildings")
       .then((res) => res.json())
-      .then((data) => setBuildings(data));
+      .then((data) => {
+        setBuildings(data);
+        // console.log("Fetched buildings:", JSON.stringify(data, null, 2));
+      });
   }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
+      Text to see it works
       <BuildingScene buildings={buildings} />
     </div>
   );
