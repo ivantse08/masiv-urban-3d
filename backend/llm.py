@@ -16,7 +16,7 @@ def process_query(query):
         """
     
     response = requests.post(
-        "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1",
+        "https://api-inference.huggingface.co/models/google/flan-t5-large",
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )
