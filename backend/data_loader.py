@@ -27,7 +27,6 @@ def get_buildings():
     extra_gdf = gpd.GeoDataFrame.from_features(extra_features, crs="EPSG:4326")
 
     joined = gpd.sjoin(main_gdf, extra_gdf, how="left", predicate="intersects")
-    print(joined)
 
     buildings = []
 
@@ -57,8 +56,8 @@ def get_buildings():
             "extra": {
                 "bldg_code": row.get("bldg_code") or "Unknown",
                 "bldg_code_desc": row.get("bldg_code_desc") or "Unknown",
-                "shape_area": float(row.get("shape__area")) if gpd.notna(row.get("shape__area")) else -1,
-                "shape_length": float(row.get("shape__length")) if gpd.notna(row.get("shape__length")) else -1,
+                "shape_area": safe_float(row.get("shape__area")),
+                "shape_length": safe_float(row.get("shape__length")),
                 "obscured": row.get("obscured") or "Unknown",
                 "create_dt_utc": row.get("create_dt_utc") or "Unknown",
             }
@@ -67,6 +66,12 @@ def get_buildings():
         buildings.append(building)
 
     return buildings
+
+def safe_float(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return -1
 
 
 
