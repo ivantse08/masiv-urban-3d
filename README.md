@@ -42,7 +42,7 @@ A web-based 3D visualization tool for exploring building data, including interac
   - The other contains **supplementary metadata**, such as:
     - Building code and description
     - Shape area and perimeter
-    - Creation date and obscurity flag
+    - Obscurity flag
 
 - The datasets are merged using **GeoPandas** via a spatial join:
   - Footprints and metadata are matched using `sjoin` based on their geometry intersections.
@@ -67,7 +67,7 @@ A web-based 3D visualization tool for exploring building data, including interac
 
 - **Key features**:
   - **Live 3D rendering** of building footprints based on real-world elevation data.
-  - **Interactive popups** with metadata on click (e.g., height, stage, building code, creation date).
+  - **Interactive popups** with metadata on click (e.g., height, stage, building code, area ).
   - **Natural Language Querying**: Users can type queries like `"show buildings taller than 30m"` and see filtered results.
   - **Error handling** for failed API calls or invalid responses (e.g., JSON decoding).
 
@@ -79,3 +79,8 @@ A web-based 3D visualization tool for exploring building data, including interac
 
 - Hosted on:  
   **[https://masiv-urban-3d.vercel.app](https://masiv-urban-3d.vercel.app)**
+
+> ⚠️ **Note**: Not all building footprints had a matching metadata entry in the supplementary dataset due to slight differences in geometry or missing overlap.  
+> To ensure completeness of the 3D scene, all valid building footprints are included.  
+> If metadata was missing, default fallback values like `"Unknown"` or `-1` are used for those fields.  
+> This means not every building has the exact same metadata structure as specified in the original datasets — this was a conscious trade-off to preserve spatial accuracy and visual continuity.

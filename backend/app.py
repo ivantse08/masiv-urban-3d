@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from llm import process_query
 from data_loader import get_buildings, filter_buildings
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -25,5 +26,11 @@ def query():
 
     return jsonify(filtered)
 
+# Health check route
+@app.route("/healthz")
+def health_check():
+    return jsonify({"status": "ok"})
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)
