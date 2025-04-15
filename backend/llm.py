@@ -5,9 +5,18 @@ import os
 HUGGINGFACE_API_KEY = os.environ.get("HF_API_KEY")
 
 def process_query(query):
-    prompt = f"Extract the filter from this query: '{query}'.  Return a JSON object with 'attribute' (e.g., height), 'operator' (e.g., >), and 'value' (e.g., 100)."
+    prompt = f"""Extract a filter from a natural language query.
+
+        Input: "{query}"
+
+        Return a JSON object like:
+        {{"attribute": "height", "operator": ">", "value": 100}}
+
+        Only return the JSON object. No explanations, no comments.
+        """
+    
     response = requests.post(
-        "https://api-inference.huggingface.co/models/google/flan-t5-base",
+        "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1",
         headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
         json={"inputs": prompt}
     )
