@@ -1,5 +1,6 @@
 import requests
 import geopandas as gpd
+from shapely.geometry import shape
 import math
 
 def get_buildings():

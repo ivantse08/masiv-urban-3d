@@ -8,7 +8,7 @@ A web-based 3D visualization tool for exploring building data, including interac
 
 - **Frontend (React/Vercel)**: [https://masiv-urban-3d.vercel.app](https://masiv-urban-3d.vercel.app)
 - **Backend (Flask/Render)**: [https://masiv-urban-3d.onrender.com](https://masiv-urban-3d.onrender.com)
-
+ Note: Backend is API-only and does **not serve any visual content**—just JSON responses consumed by the frontend.
 ---
 
 ## 🧠 Features
@@ -33,8 +33,49 @@ A web-based 3D visualization tool for exploring building data, including interac
 
 ### 📦 Backend (Flask + Render)
 
-#### 1. Clone & install dependencies:
-```bash
-git clone https://github.com/ivantse08/masiv-urban-3d
-cd backend
-pip install -r requirements.txt
+- The backend uses **Flask** to serve two main endpoints:
+  - `GET /api/buildings`: Returns all building footprints within a fixed radius (centered in downtown Calgary), including building height and extra metadata.
+  - `POST /api/query`: Accepts a natural language query, interprets it using a Hugging Face LLM, and returns a filtered list of matching buildings.
+
+- Two **GeoJSON datasets from the City of Calgary** are fetched dynamically:
+  - One dataset contains **building footprints** along with elevation info.
+  - The other contains **supplementary metadata**, such as:
+    - Building code and description
+    - Shape area and perimeter
+    - Creation date and obscurity flag
+
+- The datasets are merged using **GeoPandas** via a spatial join:
+  - Footprints and metadata are matched using `sjoin` based on their geometry intersections.
+  - Buildings without matching metadata are still retained with default values like `"Unknown"` or `-1`.
+
+- NaN and missing values are handled safely to ensure the final JSON is valid and frontend-compatible.
+
+- The backend is deployed using **Render**, with automatic deployment from GitHub on each push.
+
+### 💻 Frontend (React + Vercel)
+
+- The frontend is built using **React** with **React Three Fiber** for 3D rendering.
+- It renders a 3D map of Calgary buildings by extruding their footprint polygons using:
+  - `rooftop_elev_z` and `grd_elev_min_z` to calculate building height.
+  - `coordinates` for the footprint geometry.
+
+- **Technologies used**:
+  - [`three.js`](https://threejs.org/) + [`@react-three/fiber`](https://docs.pmnd.rs/react-three-fiber): For interactive 3D visualization.
+  - [`@react-three/drei`](https://github.com/pmndrs/drei): For camera controls and helpers like `OrbitControls`.
+  - **React Hooks** (`useEffect`, `useState`) for fetching and rendering data.
+  - **Vercel** for seamless frontend deployment from GitHub.
+
+- **Key features**:
+  - **Live 3D rendering** of building footprints based on real-world elevation data.
+  - **Interactive popups** with metadata on click (e.g., height, stage, building code, creation date).
+  - **Natural Language Querying**: Users can type queries like `"show buildings taller than 30m"` and see filtered results.
+  - **Error handling** for failed API calls or invalid responses (e.g., JSON decoding).
+
+- **Data flow**:
+  1. On load, the app fetches data from the Flask backend via `GET /api/buildings`.
+  2. Buildings are rendered in 3D using their shape and height data.
+  3. Users can enter natural language filters, which are sent via `POST /api/query` to the backend.
+  4. The view updates in real-time based on the filtered result.
+
+- Hosted on:  
+  **[https://masiv-urban-3d.vercel.app](https://masiv-urban-3d.vercel.app)**
