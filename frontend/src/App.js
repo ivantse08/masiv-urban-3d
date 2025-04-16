@@ -52,7 +52,7 @@ function App() {
       <div style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}>
         <input
           type="text"
-          placeholder="Ask something like 'show tall buildings'"
+          placeholder="Ask something like 'show buildings above 30 meters'"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           style={{ padding: "8px", width: "300px", fontSize: "14px" }}
