@@ -5,6 +5,8 @@ function App() {
   const [buildings, setBuildings] = useState([]);
   const [fetchedBuildings, setFetchedBuildings] = useState([]);
   const [query, setQuery] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Pull building data on start
   useEffect(() => {
@@ -23,8 +25,6 @@ function App() {
       });
   }, []);
 
-  const [loading, setLoading] = useState(false);
-
   const handleQuery = async () => {
     setLoading(true);
     try {
@@ -40,6 +40,7 @@ function App() {
       setFetchedBuildings(data);
     } catch (err) {
       console.error("Query failed:", err);
+      setError("There was an issue with your query. Please try tweaking your prompt.");
     } finally {
       setLoading(false);
     }
@@ -59,6 +60,7 @@ function App() {
           Submit
         </button>
         {loading && <p style={{ position: 'absolute', top: 50, left: 10 }}>Loading...</p>}
+        {error && <p style={{ position: 'absolute', top: 50, left: 10, color: 'red' }}>{error}</p>}
       </div>
       <BuildingScene buildings={buildings} fetchedBuildings={fetchedBuildings} />
     </div>

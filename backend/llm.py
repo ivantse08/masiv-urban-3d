@@ -6,9 +6,9 @@ HUGGINGFACE_API_KEY = os.environ.get("HF_API_KEY")
 
 def process_query(query):
     prompt = f"""
-    You are a helpful assistant that extracts filters about building properties from user queries.
-    Here is the user query: "{query}"
-    Choose the most relevant filter based on these options:
+    You are a helpful assistant that extracts building filter conditions from natural language.
+
+    Available attributes:
     - height
     - area
     - perimeter
@@ -18,10 +18,22 @@ def process_query(query):
     - building_type
     - building_code
 
-    Respond ONLY using this format: attribute operator value
-    Example: height > 30
-    If a string value is needed (like stage or obscured), put it in quotes: stage = "Constructed"
-    Only respond with one line. No explanations.
+    For the query below, respond with exactly one condition in the format:
+    attribute operator value
+    Query: "{query}"
+    Examples:
+    "Show buildings taller than 50m" → height > 50  
+    "Only constructed buildings" → stage = "Constructed"  
+    "Obscured buildings" → obscured = "Y"
+    "Hide obscured buildings" → obscured = "N"
+    "Find buildings with an area over 1000 square meters" -> area > 1000
+    "List buildings with perimeter less than 300 meters" → perimeter < 300
+    "Show building with struct ID 12345" → struct_id = 12345
+    "Show only commercial buildings" → building_type = "Commercial"
+    "Find buildings with code 4" → building_code = 4
+
+    Always return exactly one condition in this format and nothing else.
+    Query: "{query}"
     """
     
     response = requests.post(
