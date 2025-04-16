@@ -18,10 +18,10 @@ export default function BuildingPopup({ building, onClose }) {
       <p><b>Stage:</b> {building.stage}</p>
       {building.extra && (
         <>
-            <p><b>Building Type:</b> {building.extra.bldg_code_desc}</p>
-            <p><b>Building Code:</b> {building.extra.bldg_code}</p>
-            <p><b>Area:</b> {building.extra.shape_area}m^2</p>
-            <p><b>Perimeter:</b> {building.extra.shape_length}m</p>
+            <p><b>Building Type:</b> {building.extra.building_type}</p>
+            <p><b>Building Code:</b> {building.extra.building_type}</p>
+            <p><b>Area:</b> {building.extra.area}m^2</p>
+            <p><b>Perimeter:</b> {building.extra.perimeter}m</p>
             <p><b>Obscured:</b> {building.extra.obscured}</p>
         </>
         )}
