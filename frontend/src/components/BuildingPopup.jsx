@@ -19,7 +19,7 @@ export default function BuildingPopup({ building, onClose }) {
       {building.extra && (
         <>
             <p><b>Building Type:</b> {building.extra.building_type}</p>
-            <p><b>Building Code:</b> {building.extra.building_type}</p>
+            <p><b>Building Code:</b> {building.extra.building_code}</p>
             <p><b>Area:</b> {building.extra.area}m^2</p>
             <p><b>Perimeter:</b> {building.extra.perimeter}m</p>
             <p><b>Obscured:</b> {building.extra.obscured}</p>
