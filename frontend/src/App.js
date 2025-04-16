@@ -38,6 +38,7 @@ function App() {
   
       const data = await res.json();
       setFetchedBuildings(data);
+      setError(null);
     } catch (err) {
       console.error("Query failed:", err);
       setError("There was an issue with your query. Please try tweaking your prompt.");
