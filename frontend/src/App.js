@@ -62,7 +62,7 @@ function App() {
           Submit
         </button>
         {loading && <p style={{ position: 'absolute', top: 50, left: 10 }}>Loading...</p>}
-        {error && <p style={{ position: 'absolute', top: 50, left: 10, color: 'red' }}>{error}</p>}
+        {error && <p style={{ position: 'absolute', top: 60, left: 10, color: 'red' }}>{error}</p>}
       </div>
       <BuildingScene buildings={buildings} fetchedBuildings={fetchedBuildings} />
     </div>
