@@ -6,7 +6,7 @@ import math
 def get_buildings():
     url = "https://data.calgary.ca/resource/cchr-krqg.geojson"
     params = {
-        "$where": "within_circle(polygon, 51.0447, -114.0631, 500)",  # Approx. 3–4 blocks
+        "$where": "within_circle(polygon, 51.0780, -114.1340, 500)",  # Approx. 3–4 blocks
         "$limit": 1000
     }
 
@@ -18,7 +18,7 @@ def get_buildings():
 
     url_metaData = "https://data.calgary.ca/resource/uc4c-6kbd.geojson"
     metaDataParams = {
-        "$where": "within_circle(multipolygon, 51.0447, -114.0631, 500)",  # Approx. 3–4 blocks
+        "$where": "within_circle(multipolygon, 51.0780, -114.1340, 500)",  # Approx. 3–4 blocks
         "$limit": 1000
     }
     buildingmetaDataResponse = requests.get(url_metaData, params=metaDataParams)
