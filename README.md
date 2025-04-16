@@ -13,7 +13,7 @@ A web-based 3D visualization tool for exploring building data, including interac
 
 ## 🧠 Features
 
-- 3D buildings rendered from geospatial footprint and height data using React Three Fiber.
+- 3D buildings rendered centered around the University of Calgary from geospatial footprint and height data using React Three Fiber.
 - Query buildings using natural language powered by Hugging Face LLM.
 - Filtered results update in real-time.
 - Popup info on building click.
@@ -38,7 +38,7 @@ A web-based 3D visualization tool for exploring building data, including interac
   - `POST /api/query`: Accepts a natural language query, interprets it using a Hugging Face LLM, and returns a filtered list of matching buildings.
 
 - Two **GeoJSON datasets from the City of Calgary** are fetched dynamically:
-  - One dataset contains **building footprints** along with elevation info.
+  - One dataset contains **building footprints** along with elevation info. This dataset took priority for rendering
   - The other contains **supplementary metadata**, such as:
     - Building code and description
     - Shape area and perimeter
@@ -47,6 +47,7 @@ A web-based 3D visualization tool for exploring building data, including interac
 - The datasets are merged using **GeoPandas** via a spatial join:
   - Footprints and metadata are matched using `sjoin` based on their geometry intersections.
   - Buildings without matching metadata are still retained with default values like `"Unknown"` or `-1`.
+  - Due to possible mismatches of the building datasets, metadata about the building may not be extremely precise (i.e. 2 buildings exist as seperate in rendering but exist as one in metadata causing for some buildings to have same area/length when they're right next to each other even if they're different)
 
 - NaN and missing values are handled safely to ensure the final JSON is valid and frontend-compatible.
 
