@@ -1,4 +1,4 @@
-# 🏙️ Masiv Urban 3D Viewer
+# 🏙️ Calgary Urban Building 3D Viewer
 
 A web-based 3D visualization tool for exploring building data, including interactive filtering powered by a Large Language Model (LLM).
 
